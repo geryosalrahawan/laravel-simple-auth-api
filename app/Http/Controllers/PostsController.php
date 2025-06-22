@@ -13,7 +13,7 @@ class PostsController extends Controller
 
 
 
-
+    /// creating a post
     public function createPosts(Request $request)
     {
         $user = auth()->user();
@@ -33,11 +33,20 @@ class PostsController extends Controller
             'post' => $post
         ], 201);
     }
+///////////////////////////////////////////////////////////////////////
 
+//show all posts
+    public function showall()
+    {
+    $posts = Posts::all();
 
+    
+    return response()->json([
+        'posts' => $posts
+    ]);
 
-
-
+    }
+    //show the current user posts
     public function showmine()
     {
     $user = auth()->user();
@@ -49,7 +58,9 @@ class PostsController extends Controller
     ]);
 
     }
-        public function showother($id)
+//////////////////////////////////////////////////////////////
+///show a spacific user post
+    public function showother($id)
     {
     $user = User::findOrFail($id);
 
@@ -61,27 +72,19 @@ class PostsController extends Controller
     ]);
 
     }
+////////////////////////////////////////////////////////////////
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Posts $posts)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
+    //update the posts
 public function update(Request $request, $id)
 {
     $user = auth()->user();
-    $post = Post::findOrFail($id);
+    $post = Posts::findOrFail($id);
 
     if ($post->user_id !== $user->id) {
         return response()->json(['error' => 'Unauthorized'], 403);
     }
-
+    //////////////////////////////////////////////////////////////
+///delete the posts
     $post->update($request->validated());
 
     return response()->json([
