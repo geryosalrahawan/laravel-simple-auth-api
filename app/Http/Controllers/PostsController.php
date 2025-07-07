@@ -83,21 +83,29 @@ public function update(Request $request, $id)
     if ($post->user_id !== $user->id) {
         return response()->json(['error' => 'Unauthorized'], 403);
     }
-    //////////////////////////////////////////////////////////////
-///delete the posts
     $post->update($request->validated());
-
+    
     return response()->json([
         'message' => 'Post updated successfully',
         'post' => $post
     ]);
 }
+//////////////////////////////////////////////////////////////
+///delete the posts
     /**
      * Remove the specified resource from storage.
      */
 public function destroy($id)
   {
+
+
     $post = Posts::find($id);
+    
+    $user = auth()->user();
+    if ($post->user_id !== $user->id) {
+        return response()->json(['error' => 'Unauthorized'], 403);
+    }
+
     $post->delete();
     return 'success, Post deleted successfully';
   }

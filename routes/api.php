@@ -2,6 +2,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PostsController;
+use App\Http\Controllers\CommentsController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/doctorregister', [AuthController::class, 'DoctorRegister']);
@@ -14,6 +15,10 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/users/{id}/posts', [PostsController::class, 'showother']);
+    Route::post('/posts/{post}/comments', [CommentsController::class, 'store']);
+    Route::get('/posts/{post}/comments', [CommentsController::class, 'index']);
+    Route::put('/posts/comments/{comment}', [CommentsController::class, 'update']);
+    Route::delete('/posts/comments/{comment}', [CommentsController::class, 'destroy']);
 });
 //the following apis only users with doctor role can use
 Route::middleware(['auth:api', 'role:admin,doctor'])->group(function(){
